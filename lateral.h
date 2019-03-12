@@ -125,7 +125,7 @@ inline TourModifier perturbation_climb(const std::vector<Swap>& swaps, const Tou
             }
             new_tour.move(new_swap.a, new_swap.b);
         }
-        solver::hill_climb(new_tour);
+        solver::multi_climb(new_tour);
         if (new_tour.length() < original_length)
         {
             return new_tour;

@@ -20,6 +20,7 @@ public:
     // TourModifier& operator=(const TourModifier& other) = default;
 
     void move(primitives::point_id_t a, primitives::point_id_t b);
+    void vmove(primitives::point_id_t v, primitives::point_id_t n);
     primitives::point_id_t next(primitives::point_id_t i) const { return m_next[i]; }
     primitives::point_id_t prev(primitives::point_id_t i) const;
     std::vector<primitives::point_id_t> order() const;
@@ -27,6 +28,7 @@ public:
 
     primitives::length_t length() const;
     primitives::length_t length(primitives::point_id_t i) const;
+    primitives::length_t prev_length(primitives::point_id_t i) const;
 
     const LengthMap& length_map() const { return m_length_map; }
 

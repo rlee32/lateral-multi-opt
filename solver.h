@@ -4,6 +4,7 @@
 #include "TourModifier.h"
 #include "constants.h"
 #include "primitives.h"
+#include "vopt/vopt.h"
 
 #include <vector>
 
@@ -66,21 +67,53 @@ inline Swap first_improvement(const TourModifier& tour)
     return {};
 }
 
-inline void hill_climb(TourModifier& tour_modifier)
+inline bool hill_climb(TourModifier& tour)
 {
-    auto move {first_improvement(tour_modifier)};
+    bool improved {false};
+    auto move {first_improvement(tour)};
+    if (move.improvement > 0)
+    {
+        improved = true;
+    }
     int iteration{1};
     while (move.improvement > 0)
     {
-        tour_modifier.move(move.a, move.b);
+        tour.move(move.a, move.b);
         if (constants::verbose)
         {
-            auto length {tour_modifier.length()};
+            auto length {tour.length()};
             std::cout << "Iteration " << iteration
                 << " tour length: " << length
                 << " (step improvement: " << move.improvement << ")\n";
         }
-        move = first_improvement(tour_modifier);
+        move = first_improvement(tour);
+        if (move.improvement > 0)
+        {
+            improved = true;
+        }
+        ++iteration;
+    }
+    return improved;
+}
+
+inline void multi_climb(TourModifier& tour)
+{
+    int iteration{1};
+    while (true)
+    {
+        bool improved {false};
+        improved |= hill_climb(tour);
+        improved |= vopt::hill_climb(tour);
+        if (constants::verbose)
+        {
+            auto length {tour.length()};
+            std::cout << "Multi-iteration " << iteration
+                << " tour length: " << length << "\n";
+        }
+        if (not improved)
+        {
+            break;
+        }
         ++iteration;
     }
 }

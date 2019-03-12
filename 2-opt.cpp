@@ -25,7 +25,7 @@ int main(int argc, const char** argv)
     std::cout << "Initial tour length: " << initial_tour_length << std::endl;
 
     // Standard 2-opt hill-climbing.
-    solver::hill_climb(tour);
+    solver::multi_climb(tour);
 
     // Save result.
     const auto final_length {tour.length()};

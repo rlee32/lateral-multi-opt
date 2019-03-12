@@ -52,6 +52,11 @@ primitives::length_t TourModifier::length() const
     return sum;
 }
 
+primitives::length_t TourModifier::prev_length(primitives::point_id_t i) const
+{
+    return m_length_map.length(i, prev(i));
+}
+
 primitives::length_t TourModifier::length(primitives::point_id_t i) const
 {
     return m_length_map.length(i, m_next[i]);
@@ -87,6 +92,24 @@ void TourModifier::move(primitives::point_id_t a, primitives::point_id_t b)
     break_adjacency(b);
     create_adjacency(a, b);
     create_adjacency(m_next[a], m_next[b]);
+    update_next();
+}
+
+void TourModifier::vmove(primitives::point_id_t v, primitives::point_id_t n)
+{
+    const auto prev_v {prev(v)};
+    m_length_map.erase(v, m_next[v]);
+    m_length_map.erase(v, prev_v);
+    m_length_map.erase(n, m_next[n]);
+    m_length_map.insert(v, n);
+    m_length_map.insert(v, m_next[n]);
+    m_length_map.insert(prev_v, m_next[v]);
+    break_adjacency(v);
+    break_adjacency(prev_v);
+    break_adjacency(n);
+    create_adjacency(v, n);
+    create_adjacency(v, m_next[n]);
+    create_adjacency(prev_v, m_next[v]);
     update_next();
 }
 
