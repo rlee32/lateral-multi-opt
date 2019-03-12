@@ -113,7 +113,7 @@ inline TourModifier perturbation_climb(const std::vector<Swap>& swaps, const Tou
     const auto original_points {tour.order()};
     for (const auto& swap : swaps)
     {
-        TourModifier new_tour(tour);
+        auto new_tour = tour;
         new_tour.move(swap.a, swap.b);
         const Pair restriction(Segment(swap.a, swap.b), Segment(tour.next(swap.a), tour.next(swap.b)));
         while (true)

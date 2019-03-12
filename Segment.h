@@ -16,6 +16,10 @@ struct Segment
     {
         return min == other.min and max == other.max;
     }
+    bool operator!=(const Segment& other) const
+    {
+        return not operator==(other);
+    }
     bool operator<(const Segment& other) const
     {
         return min < other.min;

@@ -1,6 +1,7 @@
 #include "TourModifier.h"
 #include "fileio.h"
 #include "lateral.h"
+#include "vopt/lateral.h"
 #include "solver.h"
 
 #include <iostream>
@@ -24,7 +25,6 @@ int main(int argc, const char** argv)
     const auto initial_tour_length {tour.length()};
     std::cout << "Initial tour length: " << initial_tour_length << std::endl;
 
-    // Standard 2-opt hill-climbing.
     solver::multi_climb(tour);
 
     // Save result.
@@ -38,17 +38,27 @@ int main(int argc, const char** argv)
 
     // Perturbation hill-climbing.
     auto best_tour {tour};
-    while (true)
+    bool improving {false};
+    do
     {
-        const auto new_tour {lateral::perturbation_climb(best_tour)};
-        const auto new_length {new_tour.length()};
-        if (new_length >= best_tour.length())
+        improving = false;
+        auto new_tour = vopt::lateral::perturbation_climb(best_tour);
+        auto new_length = new_tour.length();
+        if (new_length < best_tour.length())
         {
-            break;
+            best_tour = new_tour;
+            improving = true;
         }
-        std::cout << "perturbation improvement: " << new_length << std::endl;
-        best_tour = new_tour;
-    }
+        std::cout << "v-opt perturbation improvement: " << new_length << std::endl;
+        new_tour = lateral::perturbation_climb(best_tour);
+        new_length = new_tour.length();
+        if (new_length < best_tour.length())
+        {
+            best_tour = new_tour;
+            improving = true;
+        }
+        std::cout << "2-opt perturbation improvement: " << new_length << std::endl;
+    } while (improving);
     std::cout << "final length: " << best_tour.length() << std::endl;
     return 0;
 }

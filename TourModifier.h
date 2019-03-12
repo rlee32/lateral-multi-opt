@@ -13,11 +13,9 @@ class TourModifier
 {
     using Adjacents = std::array<primitives::point_id_t, 2>;
 public:
-    TourModifier(const TourModifier& tour);
     TourModifier(const std::vector<primitives::point_id_t>& initial_tour
          , const std::vector<primitives::space_t>& x
          , const std::vector<primitives::space_t>& y);
-    // TourModifier& operator=(const TourModifier& other) = default;
 
     void move(primitives::point_id_t a, primitives::point_id_t b);
     void vmove(primitives::point_id_t v, primitives::point_id_t n);

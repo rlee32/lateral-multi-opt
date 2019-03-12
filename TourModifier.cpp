@@ -1,8 +1,5 @@
 #include "TourModifier.h"
 
-TourModifier::TourModifier(const TourModifier& tour)
-    : TourModifier(tour.order(), tour.m_length_map.x(), tour.m_length_map.y()) {}
-
 TourModifier::TourModifier(const std::vector<primitives::point_id_t>& initial_tour
      , const std::vector<primitives::space_t>& x
      , const std::vector<primitives::space_t>& y)
@@ -156,7 +153,8 @@ void TourModifier::fill_adjacent(primitives::point_id_t point, primitives::point
     }
     else
     {
-        std::cout << "No availble slot for new adjacent." << std::endl;
+        std::cout << __func__ << ": error: no available slot for new adjacent." << std::endl;
+        std::cout << point << " -> " << new_adjacent << std::endl;
         std::abort();
     }
 }
