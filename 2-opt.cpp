@@ -48,16 +48,16 @@ int main(int argc, const char** argv)
         {
             best_tour = new_tour;
             improving = true;
+            std::cout << "v-opt perturbation improvement: " << new_length << std::endl;
         }
-        std::cout << "v-opt perturbation improvement: " << new_length << std::endl;
         new_tour = lateral::perturbation_climb(best_tour);
         new_length = new_tour.length();
         if (new_length < best_tour.length())
         {
             best_tour = new_tour;
             improving = true;
+            std::cout << "2-opt perturbation improvement: " << new_length << std::endl;
         }
-        std::cout << "2-opt perturbation improvement: " << new_length << std::endl;
     } while (improving);
     std::cout << "final length: " << best_tour.length() << std::endl;
     return 0;
